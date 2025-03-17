@@ -801,6 +801,77 @@ createButton("Chaos (Theme if want destroy only!)", function()
         end
     end)
 
+createButton("Nootaz Warning: Be ready for chaos.", function()
+    -- Variables
+    local pingudecal = "http://www.roblox.com/asset/?id=382332426"
+    local didpingu = false
+
+    if didpingu then
+        warn("Already Ran! Did not execute the script!")
+        return
+    end
+
+    didpingu = true
+
+    -- Play Sound (Music First, No Chaos Yet)
+    local nooties = Instance.new("Sound", workspace)
+    nooties.SoundId = "rbxassetid://82174917569958" -- Corrected sound ID format
+    nooties.Volume = 1
+    nooties.PlaybackSpeed = 0.102 -- Set sound speed
+    nooties.Looped = true
+    nooties.Parent = workspace
+    nooties:Play()
+
+    -- Wait Before Chaos Starts
+    task.wait(10) -- 10 seconds of peaceful music, then chaos begins!
+
+    -- INTENSE CHAOS STARTS HERE
+    -- Set Skybox to Pingu Everywhere
+    local Sky = Instance.new("Sky", game.Lighting)
+    Sky.SkyboxBk = pingudecal
+    Sky.SkyboxDn = pingudecal
+    Sky.SkyboxFt = pingudecal
+    Sky.SkyboxLf = pingudecal
+    Sky.SkyboxRt = pingudecal
+    Sky.SkyboxUp = pingudecal
+
+    -- Add Pingu Decals to EVERY Part!
+    local function addDecalsToPart(part)
+        local faces = {"Top", "Bottom", "Left", "Right", "Front", "Back"}
+        for _, face in pairs(faces) do
+            local decal = Instance.new("Decal", part)
+            decal.Face = Enum.NormalId[face]
+            decal.Texture = pingudecal
+        end
+    end
+
+    -- Explosions and Decals on EVERY PART!
+    for _, obj in pairs(workspace:GetDescendants()) do
+        if obj:IsA("Part") or obj:IsA("MeshPart") then
+            -- Add Pingu Decals
+            addDecalsToPart(obj)
+
+            -- Add Particle Effect for Extra Chaos
+            local VTest = Instance.new("ParticleEmitter", obj)
+            VTest.Texture = pingudecal
+            VTest.Speed = NumberRange.new(500) -- Faster effect!
+            VTest.Rate = 2000 -- More particles!
+            VTest.Lifetime = NumberRange.new(3) -- Short-lived spam!
+            VTest.Size = NumberSequence.new(10, 100) -- Big particles!
+
+            -- Spam Explosions
+            coroutine.wrap(function()
+                while true do
+                    task.wait(0.1) -- Spam explosions every 0.1s!
+                    local Explosion = Instance.new("Explosion", obj)
+                    Explosion.BlastRadius = 50000 -- HUGE destruction!
+                    Explosion.BlastPressure = 1000000 -- Super strong explosions!
+                end
+            end)()
+        end
+    end
+end)
+
 createButton("Toadroast", function()
     wait(0)
     math.randomseed(tick() % 1 * 1e6)
