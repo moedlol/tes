@@ -865,8 +865,8 @@ createButton("Toadroast", function()
 
     -- Faster Rain with ground deletion
     local rain = coroutine.create(function()
-        while wait(0.1) do  -- Reduced wait time to make it rain faster
-            for i = 1, 10 do  -- Spawn 10 toads at a time
+        while wait(0.2) do  -- Reduced wait time to make it rain faster
+            for i = 1, 7 do  -- Spawn 10 toads at a time
                 local part = Instance.new("Part", workspace)
                 part.Name = "Meshes/toad (3)"
                 part.CanCollide = false
@@ -914,7 +914,7 @@ createButton("Toadroast", function()
 
     -- Warning Message
     local hint = Instance.new("Hint", workspace)
-    hint.Text = "GET HACKED LOSERS!!!"
+    hint.Text = "Imagine getting toadroast -YaazDaQuitos"
     wait(10)
     hint:Destroy()
 end)
