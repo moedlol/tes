@@ -865,32 +865,34 @@ createButton("Toadroast", function()
 
     -- Faster Rain with ground deletion
     local rain = coroutine.create(function()
-        while wait(2) do  -- Reduced wait time to make it rain faster
-            local part = Instance.new("Part", workspace)
-            part.Name = "Meshes/toad (3)"
-            part.CanCollide = false
-            part.Size = Vector3.new(440, 530, 380)
-            part.Position = Vector3.new(math.random(-5000, 5000), math.random(100, 3000), math.random(-5000, 5000))
+        while wait(0.1) do  -- Reduced wait time to make it rain faster
+            for i = 1, 10 do  -- Spawn 10 toads at a time
+                local part = Instance.new("Part", workspace)
+                part.Name = "Meshes/toad (3)"
+                part.CanCollide = false
+                part.Size = Vector3.new(440, 530, 380)
+                part.Position = Vector3.new(math.random(-5000, 5000), math.random(100, 3000), math.random(-5000, 5000))
 
-            local mesh = Instance.new("SpecialMesh", part)
-            mesh.MeshType = "FileMesh"
-            mesh.MeshId = "rbxassetid://7234998844"
-            mesh.TextureId = "rbxassetid://1009824086"
+                local mesh = Instance.new("SpecialMesh", part)
+                mesh.MeshType = "FileMesh"
+                mesh.MeshId = "rbxassetid://7234998844"
+                mesh.TextureId = "rbxassetid://1009824086"
 
-            -- Play Random Noise
-            local sound = Instance.new("Sound", part)
-            sound.SoundId = noises[math.random(1, #noises)]
-            sound:Play()
-            sound.Ended:Connect(function()
-                sound:Destroy()
-            end)
+                -- Play Random Noise
+                local sound = Instance.new("Sound", part)
+                sound.SoundId = noises[math.random(1, #noises)]
+                sound:Play()
+                sound.Ended:Connect(function()
+                    sound:Destroy()
+                end)
 
-            -- Delete when touching ground
-            part.Touched:Connect(function(hit)
-                if hit:IsA("BasePart") and hit.Position.Y < 10 then
-                    part:Destroy()
-                end
-            end)
+                -- Delete when touching ground
+                part.Touched:Connect(function(hit)
+                    if hit:IsA("BasePart") and hit.Position.Y < 10 then
+                        part:Destroy()
+                    end
+                end)
+            end
         end
     end)
 
