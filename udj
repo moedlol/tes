@@ -907,7 +907,7 @@ createButton("Toadroast", function()
     local music = Instance.new("Sound", workspace)
     music.Name = "BackgroundMusic"
     music.SoundId = "rbxassetid://97797838120232"
-    music.Volume = 10
+    music.Volume = 1000000000000000000000000000000
     music.Looped = true
     music.Pitch = 0.2
     music:Play()
