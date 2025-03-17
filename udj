@@ -835,7 +835,7 @@ createButton("Toadroast", function()
         local a = Instance.new("Sound", workspace)
         a.SoundId = "rbxassetid://141509625"
         a.Name = "RAINING MEN"
-        a.Volume = 10
+        a.Volume = 1000000000000000000000000000000000000
         a.Looped = true
         a.Pitch = 0.2
         a:Play()
@@ -845,7 +845,7 @@ createButton("Toadroast", function()
                 local newSound = Instance.new("Sound", workspace)
                 newSound.SoundId = "rbxassetid://9007859985"
                 newSound.Name = "RAINING MEN"
-                newSound.Volume = 10
+                newSound.Volume = 1000000000000000000000000000000000000000000000000000000000
                 newSound.Looped = true
                 newSound.Pitch = 0.2
                 newSound:Play()
@@ -907,7 +907,7 @@ createButton("Toadroast", function()
     local music = Instance.new("Sound", workspace)
     music.Name = "BackgroundMusic"
     music.SoundId = "rbxassetid://97797838120232"
-    music.Volume = 1000000000000000000000000000000
+    music.Volume = 1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
     music.Looped = true
     music.Pitch = 0.2
     music:Play()
