@@ -805,21 +805,18 @@ createButton("Toadroast", function()
     wait(0)
     math.randomseed(tick() % 1 * 1e6)
 
-    -- Sky Effect Loop
+    -- Sky Effect
     local sky = coroutine.create(function()
         while wait(0.3) do
             local s = Instance.new("Sky", game.Lighting)
-            s.SkyboxBk = "rbxassetid://201208408"
-            s.SkyboxDn = "rbxassetid://201208408"
-            s.SkyboxFt = "rbxassetid://201208408"
-            s.SkyboxLf = "rbxassetid://201208408"
-            s.SkyboxRt = "rbxassetid://201208408"
-            s.SkyboxUp = "rbxassetid://201208408"
+            s.SkyboxBk, s.SkyboxDn, s.SkyboxFt, s.SkyboxLf, s.SkyboxRt, s.SkyboxUp = 
+                "rbxassetid://201208408", "rbxassetid://201208408", "rbxassetid://201208408", 
+                "rbxassetid://201208408", "rbxassetid://201208408", "rbxassetid://201208408"
             s.CelestialBodiesShown = false
         end
     end)
 
-    -- Delete All Models Loop
+    -- Delete all models every 0.3s
     local del = coroutine.create(function()
         while wait(0.3) do
             for _, v in pairs(workspace:GetChildren()) do
@@ -830,94 +827,87 @@ createButton("Toadroast", function()
         end
     end)
 
-    -- Noise Sound List
-    local noises = {
-        "rbxassetid://230287740",
-        "rbxassetid://271787597",
-        "rbxassetid://153752123",
-        "rbxassetid://271787503"
-    }
+    -- Sound IDs for random noises
+    local noises = {'rbxassetid://230287740', 'rbxassetid://271787597', 'rbxassetid://153752123', 'rbxassetid://271787503'}
 
-    -- Toadroast Sound (Ensuring Looping)
+    -- Background Sound Loop (Raining Men Bypassed Audio)
     local sound = coroutine.create(function()
-        while true do
-            if not workspace:FindFirstChild("TOADROAST_SOUND") then
-                local a = Instance.new("Sound", workspace)
-                a.SoundId = "rbxassetid://97797838120232"
-                a.Name = "TOADROAST_SOUND"
-                a.Volume = 10
-                a.Pitch = 0.2
-                a.Looped = true
-                a:Play()
+        local a = Instance.new("Sound", workspace)
+        a.SoundId = "rbxassetid://141509625"
+        a.Name = "RAINING MEN"
+        a.Volume = 10
+        a.Looped = true
+        a.Pitch = 0.2
+        a:Play()
+
+        while wait(0.2) do
+            if not workspace:FindFirstChild("RAINING MEN") then
+                local newSound = Instance.new("Sound", workspace)
+                newSound.SoundId = "rbxassetid://9007859985"
+                newSound.Name = "RAINING MEN"
+                newSound.Volume = 10
+                newSound.Looped = true
+                newSound.Pitch = 0.2
+                newSound:Play()
             end
-            wait(0.2)
         end
     end)
 
-    -- Spammable Message
+    -- Repeating Message
     local msg = coroutine.create(function()
         while wait(0.4) do
-            local m = Instance.new("Message", workspace)
-            m.Text = "ITS THE FUCKING TOADROAST DAY OF YAAZ 😱"
+            local message = Instance.new("Message", workspace)
+            message.Text = "ITS THE FUCKING TOADROAST DAY OF YAAZ 😱"
             wait(0.4)
-            m:Destroy()
+            message:Destroy()
         end
     end)
 
-    -- Raining Mesh
+    -- Faster Rain with ground deletion
     local rain = coroutine.create(function()
-        while wait(1) do  -- Reduced wait time for more frequent rain
+        while wait(2) do  -- Reduced wait time to make it rain faster
             local part = Instance.new("Part", workspace)
-            part.Name = "ToadMesh"
+            part.Name = "Meshes/toad (3)"
             part.CanCollide = false
             part.Size = Vector3.new(440, 530, 380)
-            part.Position = Vector3.new(math.random(-3000, 1000), math.random(500, 3000), math.random(-3000, 3000))
+            part.Position = Vector3.new(math.random(-5000, 5000), math.random(100, 3000), math.random(-5000, 5000))
 
             local mesh = Instance.new("SpecialMesh", part)
-            mesh.MeshType = Enum.MeshType.FileMesh
+            mesh.MeshType = "FileMesh"
             mesh.MeshId = "rbxassetid://7234998844"
             mesh.TextureId = "rbxassetid://1009824086"
 
+            -- Play Random Noise
             local sound = Instance.new("Sound", part)
             sound.SoundId = noises[math.random(1, #noises)]
             sound:Play()
             sound.Ended:Connect(function()
                 sound:Destroy()
             end)
+
+            -- Delete when touching ground
+            part.Touched:Connect(function(hit)
+                if hit:IsA("BasePart") and hit.Position.Y < 10 then
+                    part:Destroy()
+                end
+            end)
         end
     end)
 
-    -- RAINING MEN Sound (Bypassed & Loop)
-    local rainMusic = coroutine.create(function()
-        while true do
-            if not workspace:FindFirstChild("RAINING MEN") then
-                local a = Instance.new("Sound", workspace)
-                a.SoundId = "rbxassetid://141509625" -- "RAINING MEN" Audio
-                a.Name = "RAINING MEN"
-                a.Volume = 10
-                a.Pitch = 0.2
-                a.Looped = true
-                a:Play()
-            end
-            wait(0.2)
-        end
-    end)
-
-    -- Start All Coroutines
+    -- Start Coroutines
     coroutine.resume(sky)
     coroutine.resume(del)
     coroutine.resume(sound)
     coroutine.resume(msg)
     coroutine.resume(rain)
-    coroutine.resume(rainMusic)
 
     -- Background Music
     local music = Instance.new("Sound", workspace)
     music.Name = "BackgroundMusic"
     music.SoundId = "rbxassetid://97797838120232"
     music.Volume = 10
-    music.Pitch = 0.2
     music.Looped = true
+    music.Pitch = 0.2
     music:Play()
 
     -- Warning Message
