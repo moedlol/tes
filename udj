@@ -1748,6 +1748,10 @@ createButton("Morph Duck", function()
                     v.Transparency = 1
                 elseif v:IsA("Accessory") or v:IsA("Clothing") then
                     v:Destroy()
+                elseif v:IsA("Humanoid") then
+                    v.HeadScale = 0 -- Hide face by scaling head to 0
+                elseif v:IsA("Decal") and v.Name == "face" then
+                    v:Destroy() -- Remove face decal
                 end
             end
         end
@@ -1756,7 +1760,7 @@ createButton("Morph Duck", function()
     hideCharacter() -- Hide the player's character
 
     -- Load and apply the morph correctly
-    local morphModel = game:GetObjects("rbxassetid://5053098614")[1] -- Properly loads the model
+    local morphModel = game:GetObjects("rbxassetid://1029050912")[1] -- Properly loads the new morph model
     if morphModel then
         morphModel.Parent = workspace
         morphModel.PrimaryPart = morphModel:FindFirstChildWhichIsA("BasePart") -- Set PrimaryPart
@@ -1766,18 +1770,52 @@ createButton("Morph Duck", function()
             character.HumanoidRootPart.CFrame = morphModel.PrimaryPart.CFrame
         end
 
-        -- Adjust morph parts
+        -- Unanchor the morph
         for _, part in pairs(morphModel:GetChildren()) do
             if part:IsA("BasePart") or part:IsA("MeshPart") then
                 part.Anchored = false
             end
         end
 
-        -- Set the player's WalkSpeed to 40
+        -- Set the player's WalkSpeed to 100
         if character and character:FindFirstChild("Humanoid") then
-            character.Humanoid.WalkSpeed = 40
+            character.Humanoid.WalkSpeed = 100
         end
+
+        -- Billboard GUI for "Evil Duck"
+        local billboard = Instance.new("BillboardGui")
+        billboard.Size = UDim2.new(5, 0, 1.5, 0)
+        billboard.StudsOffset = Vector3.new(0, 2, 0)
+        billboard.Adornee = morphModel.PrimaryPart
+        billboard.Parent = morphModel
+
+        local textLabel = Instance.new("TextLabel", billboard)
+        textLabel.Size = UDim2.new(1, 0, 1, 0)
+        textLabel.BackgroundTransparency = 1
+        textLabel.Text = "Evil Duck"
+        textLabel.TextScaled = true
+        textLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red text
+        textLabel.Font = Enum.Font.GothamBold
     end
+end)
+
+createButton("Head shake", function()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local head = character:FindFirstChild("Head")
+
+    if not head then return end
+
+    local runService = game:GetService("RunService")
+    
+    -- Shake function
+    task.spawn(function()
+        while true do
+            local angle = math.sin(tick() * 10) * 0.3 -- Smooth left-right movement
+            head.CFrame = character.PrimaryPart.CFrame * CFrame.new(0, 1.5, 0) * CFrame.Angles(0, angle, 0)
+            runService.RenderStepped:Wait()
+        end
+    end)
 end)
 
     createButton("Fire all", function()
