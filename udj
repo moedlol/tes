@@ -1812,7 +1812,7 @@ createButton("Morph Duck", function()
     mesh.Offset = Vector3.new(0, -2, 0) -- Move down slightly to align better
 
     -- 🔥 FIX: Rotate the Duck to Face Forward
-    duckBody.Orientation = Vector3.new(0, 110, 0) -- Adjust rotation so it faces forward
+    duckBody.Orientation = Vector3.new(0, 105, 0) -- Adjust rotation so it faces forward
 
     -- Weld the duck to the HumanoidRootPart (so it follows the player)
     local weld = Instance.new("WeldConstraint", duckBody)
@@ -1949,8 +1949,8 @@ end)
         loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Sheldoni-gui-29377"))()  
     end)
 
-    createButton("Yaaz Executor Backdo", function()  
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Sheldoni-gui-29377"))()  
+    createButton("Fe Bypass Backdoor Exec made by Yaaz", function()  
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/moedlol/atop/refs/heads/main/I%20fling"))()
     end)
 
 createButton("Gun Blaster", function()  
