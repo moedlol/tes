@@ -1769,29 +1769,21 @@ createButton("Morph Duck", function()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
     
-    -- Function to hide everything in the character
+    -- Function to hide everything in the character without resetting
     local function hideCharacter()
-        if character then
-            for _, v in pairs(character:GetChildren()) do
-                if v:IsA("BasePart") or v:IsA("MeshPart") then
-                    v.Transparency = 1 -- Make body parts invisible
-                elseif v:IsA("Accessory") or v:IsA("Clothing") or v:IsA("Decal") then
-                    v:Destroy() -- Remove all accessories and clothing
-                end
+        for _, v in pairs(character:GetChildren()) do
+            if v:IsA("BasePart") or v:IsA("MeshPart") then
+                v.Transparency = 1 -- Hide body parts
+                v.CanCollide = false -- Prevent collision issues
+            elseif v:IsA("Accessory") or v:IsA("Clothing") or v:IsA("Decal") then
+                v:Destroy() -- Remove accessories and clothing
             end
         end
     end
 
-    hideCharacter() -- Hide everything in the character
+    hideCharacter() -- Hide character parts
 
-    -- Remove all limbs except HumanoidRootPart
-    for _, v in pairs(character:GetChildren()) do
-        if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
-            v:Destroy()
-        end
-    end
-
-    -- Create a new part for the entire duck body
+    -- Create a new part for the duck body
     local duckBody = Instance.new("Part")
     duckBody.Size = Vector3.new(5, 5, 5)
     duckBody.Name = "DuckBody"
@@ -1804,10 +1796,10 @@ createButton("Morph Duck", function()
     -- Add the duck mesh
     local mesh = Instance.new("SpecialMesh", duckBody)
     mesh.MeshId = "rbxassetid://17399705213" -- Duck Mesh
-    mesh.TextureId = "rbxassetid://17399705259" -- New Duck Texture
-    mesh.Scale = Vector3.new(5, 5, 5) -- Adjust size
+    mesh.TextureId = "rbxassetid://17399705259" -- Correct Duck Texture
+    mesh.Scale = Vector3.new(5, 5, 5)
 
-    -- Weld the duck body to the HumanoidRootPart
+    -- Weld the duck body to HumanoidRootPart instead of replacing limbs
     local weld = Instance.new("WeldConstraint", duckBody)
     weld.Part0 = duckBody
     weld.Part1 = character.HumanoidRootPart
