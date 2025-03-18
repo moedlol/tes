@@ -1736,69 +1736,6 @@ end)
         end
     end)
 
-createButton("Morph Duck", function()
-    local player = game.Players.LocalPlayer
-    local character = player.Character
-
-    -- Function to hide the player's character
-    local function hideCharacter()
-        if character then
-            for _, v in pairs(character:GetChildren()) do
-                if v:IsA("BasePart") or v:IsA("MeshPart") then
-                    v.Transparency = 1
-                elseif v:IsA("Accessory") or v:IsA("Clothing") then
-                    v:Destroy()
-                elseif v:IsA("Humanoid") then
-                    v.HeadScale = 0 -- Hide face by scaling head to 0
-                elseif v:IsA("Decal") and v.Name == "face" then
-                    v:Destroy() -- Remove face decal
-                end
-            end
-        end
-    end
-
-    hideCharacter() -- Hide the player's character
-
-    -- Load and apply the morph correctly
-    local morphModel = game:GetObjects("rbxassetid://1029050912")[1] -- Properly loads the new morph model
-    if morphModel then
-        morphModel.Parent = workspace
-        morphModel.PrimaryPart = morphModel:FindFirstChildWhichIsA("BasePart") -- Set PrimaryPart
-
-        -- Move player to the morph
-        if character and character:FindFirstChild("HumanoidRootPart") then
-            character.HumanoidRootPart.CFrame = morphModel.PrimaryPart.CFrame
-        end
-
-        -- Unanchor the morph
-        for _, part in pairs(morphModel:GetChildren()) do
-            if part:IsA("BasePart") or part:IsA("MeshPart") then
-                part.Anchored = false
-            end
-        end
-
-        -- Set the player's WalkSpeed to 100
-        if character and character:FindFirstChild("Humanoid") then
-            character.Humanoid.WalkSpeed = 100
-        end
-
-        -- Billboard GUI for "Evil Duck"
-        local billboard = Instance.new("BillboardGui")
-        billboard.Size = UDim2.new(5, 0, 1.5, 0)
-        billboard.StudsOffset = Vector3.new(0, 2, 0)
-        billboard.Adornee = morphModel.PrimaryPart
-        billboard.Parent = morphModel
-
-        local textLabel = Instance.new("TextLabel", billboard)
-        textLabel.Size = UDim2.new(1, 0, 1, 0)
-        textLabel.BackgroundTransparency = 1
-        textLabel.Text = "Evil Duck"
-        textLabel.TextScaled = true
-        textLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red text
-        textLabel.Font = Enum.Font.GothamBold
-    end
-end)
-
 createButton("Head shake", function()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
@@ -1807,15 +1744,84 @@ createButton("Head shake", function()
     if not head then return end
 
     local runService = game:GetService("RunService")
-    
-    -- Shake function
+
+    -- Create a Motor6D for smooth head rotation
+    local neck = head:FindFirstChild("Neck") or Instance.new("Motor6D")
+    neck.Part0 = character:FindFirstChild("UpperTorso") or character:FindFirstChild("Torso")
+    neck.Part1 = head
+    neck.Parent = head
+    neck.Name = "Neck"
+
+    -- Store the original C0 for reference
+    local originalC0 = neck.C0
+
+    -- Head shake animation
     task.spawn(function()
         while true do
-            local angle = math.sin(tick() * 10) * 0.3 -- Smooth left-right movement
-            head.CFrame = character.PrimaryPart.CFrame * CFrame.new(0, 1.5, 0) * CFrame.Angles(0, angle, 0)
+            local angle = math.sin(tick() * 10) * 0.3 -- Left-right oscillation
+            neck.C0 = originalC0 * CFrame.Angles(0, angle, 0)
             runService.RenderStepped:Wait()
         end
     end)
+end)
+
+createButton("Morph Duck", function()
+    local player = game.Players.LocalPlayer
+    local character = player.Character
+
+    -- Function to hide everything in the character
+    local function hideCharacter()
+        if character then
+            for _, v in pairs(character:GetChildren()) do
+                if v:IsA("BasePart") or v:IsA("MeshPart") then
+                    v.Transparency = 1 -- Make body parts invisible
+                    if v:FindFirstChild("face") then
+                        v.face:Destroy() -- Remove face decal
+                    end
+                elseif v:IsA("Accessory") or v:IsA("Clothing") or v:IsA("Decal") then
+                    v:Destroy() -- Remove all accessories and clothing
+                end
+            end
+        end
+    end
+
+    hideCharacter() -- Hide everything in the character
+
+    -- Morph the head into a duck
+    if character and character:FindFirstChild("Head") then
+        local head = character.Head
+        for _, v in pairs(head:GetChildren()) do
+            if v:IsA("SpecialMesh") or v:IsA("Decal") then
+                v:Destroy() -- Remove existing mesh/face
+            end
+        end
+
+        local mesh = Instance.new("SpecialMesh")
+        mesh.MeshId = "rbxassetid://17399705213" -- Duck Mesh
+        mesh.TextureId = "rbxassetid://17399705213" -- Duck Texture
+        mesh.Scale = Vector3.new(5, 5, 5) -- Adjust size
+        mesh.Parent = head
+    end
+
+    -- Set WalkSpeed to 100
+    if character and character:FindFirstChild("Humanoid") then
+        character.Humanoid.WalkSpeed = 100
+    end
+
+    -- Create a Billboard GUI for "Duck"
+    local billboard = Instance.new("BillboardGui")
+    billboard.Size = UDim2.new(5, 0, 1.5, 0)
+    billboard.StudsOffset = Vector3.new(0, 2, 0)
+    billboard.Adornee = character:FindFirstChild("Head")
+    billboard.Parent = character
+
+    local textLabel = Instance.new("TextLabel", billboard)
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = "Duck"
+    textLabel.TextScaled = true
+    textLabel.TextColor3 = Color3.fromRGB(255, 255, 0) -- Yellow text
+    textLabel.Font = Enum.Font.GothamBold
 end)
 
     createButton("Fire all", function()
