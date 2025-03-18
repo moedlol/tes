@@ -1736,6 +1736,48 @@ end)
         end
     end)
 
+createButton("Morph Duck", function()
+    local player = game.Players.LocalPlayer
+    local character = player.Character
+
+    -- Function to hide the player's character
+    local function hideCharacter()
+        if character then
+            for _, v in pairs(character:GetChildren()) do
+                if v:IsA("BasePart") or v:IsA("MeshPart") then
+                    v.Transparency = 1
+                elseif v:IsA("Accessory") or v:IsA("Clothing") then
+                    v:Destroy()
+                end
+            end
+        end
+    end
+
+    hideCharacter() -- Hide the player's character
+
+    -- Load the morph model and apply it
+    local morphModel = game:GetService("InsertService"):LoadAsset(5053098614)
+    if morphModel then
+        morphModel.Parent = workspace
+        local morph = morphModel:GetChildren()[1]
+        if morph then
+            morph.Parent = workspace
+            character.HumanoidRootPart.CFrame = morph.PrimaryPart.CFrame -- Move player to the morph
+            for _, part in pairs(morph:GetChildren()) do
+                if part:IsA("BasePart") or part:IsA("MeshPart") then
+                    part.Anchored = false
+                end
+            end
+            morphModel:Destroy()
+        end
+    end
+
+    -- Set the player's walk speed to 40
+    if character and character:FindFirstChild("Humanoid") then
+        character.Humanoid.WalkSpeed = 40
+    end
+end)
+
     createButton("Fire all", function()
         while true do
             for _, player in pairs(game.Players:GetPlayers()) do
