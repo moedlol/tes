@@ -51,7 +51,7 @@ local function createGui()
     scrollFrame.Position = UDim2.new(0, 0, 0, 50)
     scrollFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
     scrollFrame.ScrollBarThickness = 10
-    scrollFrame.CanvasSize = UDim2.new(0, 0, 7, 0)
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 8, 0)
     scrollFrame.Parent = frame
 
     local listLayout = Instance.new("UIListLayout")
@@ -1841,6 +1841,14 @@ end)
 
     createButton("Yaaz Executor Backdo", function()  
         loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Sheldoni-gui-29377"))()  
+    end)
+
+createButton("Gun Blaster", function()  
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/zupersponge/8c39ed77f2817679294d70aff18d479d/raw/ed5e04b72c4fa77b8bf522d7275abf64ae585416/MLG%2520Gun%2520Script%2520ROBLOX"))()  
+    end)
+
+createButton("c00lkidd gui", function()  
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/MiRw3b/c00lgui-v3rx/main/c00lguiv3rx.lua"))()
     end)
 
     createButton("Quitos", function()  
