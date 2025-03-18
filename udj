@@ -873,12 +873,11 @@ createButton("Nootaz Warning: Be ready for chaos.", function()
 end)
 
 createButton("Toadroast", function()
-    wait(0)
     math.randomseed(tick() % 1 * 1e6)
 
     -- Sky Effect
     local sky = coroutine.create(function()
-        while wait(0.3) do
+        while task.wait(0.3) do
             local s = Instance.new("Sky", game.Lighting)
             s.SkyboxBk, s.SkyboxDn, s.SkyboxFt, s.SkyboxLf, s.SkyboxRt, s.SkyboxUp = 
                 "rbxassetid://201208408", "rbxassetid://201208408", "rbxassetid://201208408", 
@@ -889,7 +888,7 @@ createButton("Toadroast", function()
 
     -- Delete all models every 0.3s
     local del = coroutine.create(function()
-        while wait(0.3) do
+        while task.wait(0.3) do
             for _, v in pairs(workspace:GetChildren()) do
                 if v:IsA("Model") then
                     v:Destroy()
@@ -903,12 +902,12 @@ createButton("Toadroast", function()
 
     -- Background Sound Loop (Raining Men Bypassed Audio)
     local sound = coroutine.create(function()
-        while wait(0.2) do
-            for i = 1, 5 do  -- Play 5 overlapping sounds
+        while task.wait(0.2) do
+            for i = 1, 3 do  -- Reduced to 3 overlapping sounds
                 local extraSound = Instance.new("Sound", workspace)
                 extraSound.SoundId = "rbxassetid://141509625"
                 extraSound.Name = "RAINING MEN"
-                extraSound.Volume = 10 -- Max volume allowed
+                extraSound.Volume = 10
                 extraSound.Looped = false
                 extraSound.Pitch = 0.2
                 extraSound:Play()
@@ -921,22 +920,22 @@ createButton("Toadroast", function()
 
     -- Repeating Message
     local msg = coroutine.create(function()
-        while wait(0.4) do
+        while task.wait(0.4) do
             local message = Instance.new("Message", workspace)
             message.Text = "ITS THE FUCKING TOADROAST DAY OF YAAZ 😱"
-            wait(0.4)
+            task.wait(0.4)
             message:Destroy()
         end
     end)
 
     -- Faster Rain with better ground deletion
     local rain = coroutine.create(function()
-        while wait(0.2) do  -- Reduced wait time to make it rain faster
-            for i = 1, 7 do  -- Spawn 7 toads at a time
+        while task.wait(0.2) do
+            for i = 1, 5 do  -- Reduced to 5 toads at a time
                 local part = Instance.new("Part", workspace)
                 part.Name = "Meshes/toad (3)"
                 part.CanCollide = false
-                part.Anchored = false  -- Make sure it falls properly
+                part.Anchored = false
                 part.Size = Vector3.new(440, 530, 380)
                 part.Position = Vector3.new(math.random(-5000, 5000), math.random(100, 3000), math.random(-5000, 5000))
 
@@ -946,17 +945,17 @@ createButton("Toadroast", function()
                 mesh.TextureId = "rbxassetid://1009824086"
 
                 -- Play Loud Random Noise
-                for i = 1, 5 do -- Play 5 overlapping noise sounds
+                for i = 1, 3 do  -- Reduced to 3 overlapping noise sounds
                     local sound = Instance.new("Sound", part)
                     sound.SoundId = noises[math.random(1, #noises)]
-                    sound.Volume = 10 -- Max volume allowed
+                    sound.Volume = 10
                     sound:Play()
                     sound.Ended:Connect(function()
                         sound:Destroy()
                     end)
                 end
 
-                -- New Ground Deletion Fix (Touch and Timer Check)
+                -- Improved Ground Deletion
                 local deletePart = function()
                     if part and part.Parent then
                         part:Destroy()
@@ -971,7 +970,7 @@ createButton("Toadroast", function()
                 end)
 
                 -- Timer-based deletion (Backup method)
-                game:GetService("Debris"):AddItem(part, 5) -- Auto delete in 5 seconds
+                game:GetService("Debris"):AddItem(part, 5)  -- Auto delete in 5 seconds
             end
         end
     end)
@@ -987,7 +986,7 @@ createButton("Toadroast", function()
     local music = Instance.new("Sound", workspace)
     music.Name = "BackgroundMusic"
     music.SoundId = "rbxassetid://97797838120232"
-    music.Volume = 10 -- Max volume allowed
+    music.Volume = 10
     music.Looped = true
     music.Pitch = 0.2
     music:Play()
@@ -995,7 +994,7 @@ createButton("Toadroast", function()
     -- Warning Message
     local hint = Instance.new("Hint", workspace)
     hint.Text = "Imagine getting toadroast -YaazDaQuitos"
-    wait(10)
+    task.wait(10)
     hint:Destroy()
 end)
 
