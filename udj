@@ -1768,27 +1768,36 @@ end)
 createButton("Morph Duck", function()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
-    
-    -- Function to hide everything in the character without resetting
-    local function hideCharacter()
-        for _, v in pairs(character:GetChildren()) do
-            if v:IsA("BasePart") or v:IsA("MeshPart") then
-                v.Transparency = 1 -- Hide body parts
-                v.CanCollide = false -- Prevent collision issues
-            elseif v:IsA("Accessory") or v:IsA("Clothing") or v:IsA("Decal") then
-                v:Destroy() -- Remove accessories and clothing
-            end
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    local humanoid = character:FindFirstChild("Humanoid")
+
+    if not humanoidRootPart or not humanoid then return end
+
+    -- Hide all character parts instead of destroying them (prevents reset)
+    for _, v in pairs(character:GetChildren()) do
+        if v:IsA("BasePart") or v:IsA("MeshPart") then
+            v.Transparency = 1 -- Make body invisible
+            v.CanCollide = false
+        elseif v:IsA("Accessory") or v:IsA("Clothing") or v:IsA("Decal") then
+            v:Destroy() -- Remove accessories and clothes
         end
     end
 
-    hideCharacter() -- Hide character parts
+    -- Hide the face
+    local head = character:FindFirstChild("Head")
+    if head then
+        local face = head:FindFirstChild("face")
+        if face then
+            face:Destroy()
+        end
+    end
 
-    -- Create a new part for the duck body
+    -- Create a new part for the duck morph
     local duckBody = Instance.new("Part")
     duckBody.Size = Vector3.new(5, 5, 5)
     duckBody.Name = "DuckBody"
     duckBody.Parent = character
-    duckBody.Position = character.HumanoidRootPart.Position
+    duckBody.Position = humanoidRootPart.Position
     duckBody.Anchored = false
     duckBody.CanCollide = false
     duckBody.Massless = true
@@ -1799,18 +1808,16 @@ createButton("Morph Duck", function()
     mesh.TextureId = "rbxassetid://17399705259" -- Correct Duck Texture
     mesh.Scale = Vector3.new(5, 5, 5)
 
-    -- Weld the duck body to HumanoidRootPart instead of replacing limbs
+    -- Weld the duck to the HumanoidRootPart (so it follows the player)
     local weld = Instance.new("WeldConstraint", duckBody)
     weld.Part0 = duckBody
-    weld.Part1 = character.HumanoidRootPart
+    weld.Part1 = humanoidRootPart
 
     -- Set WalkSpeed to 100
-    if character:FindFirstChild("Humanoid") then
-        character.Humanoid.WalkSpeed = 100
-    end
+    humanoid.WalkSpeed = 100
 
-    -- Create a Billboard GUI for "Duck"
-    local billboard = Instance.new("BillboardGui")
+    -- Add "Duck" BillboardGUI above the player
+    local billboard = Instance.new("BillboardGui", duckBody)
     billboard.Size = UDim2.new(5, 0, 1.5, 0)
     billboard.StudsOffset = Vector3.new(0, 3, 0)
     billboard.Adornee = duckBody
