@@ -908,7 +908,7 @@ createButton("Toadroast", function()
                 local extraSound = Instance.new("Sound", workspace)
                 extraSound.SoundId = "rbxassetid://141509625"
                 extraSound.Name = "RAINING MEN"
-                extraSound.Volume = 90 -- Max volume allowed
+                extraSound.Volume = 10 -- Max volume allowed
                 extraSound.Looped = false
                 extraSound.Pitch = 0.2
                 extraSound:Play()
@@ -929,13 +929,14 @@ createButton("Toadroast", function()
         end
     end)
 
-    -- Faster Rain with ground deletion
+    -- Faster Rain with better ground deletion
     local rain = coroutine.create(function()
         while wait(0.2) do  -- Reduced wait time to make it rain faster
             for i = 1, 7 do  -- Spawn 7 toads at a time
                 local part = Instance.new("Part", workspace)
                 part.Name = "Meshes/toad (3)"
                 part.CanCollide = false
+                part.Anchored = false  -- Make sure it falls properly
                 part.Size = Vector3.new(440, 530, 380)
                 part.Position = Vector3.new(math.random(-5000, 5000), math.random(100, 3000), math.random(-5000, 5000))
 
@@ -948,19 +949,29 @@ createButton("Toadroast", function()
                 for i = 1, 5 do -- Play 5 overlapping noise sounds
                     local sound = Instance.new("Sound", part)
                     sound.SoundId = noises[math.random(1, #noises)]
-                    sound.Volume = 90 -- Max volume allowed
+                    sound.Volume = 10 -- Max volume allowed
                     sound:Play()
                     sound.Ended:Connect(function()
                         sound:Destroy()
                     end)
                 end
 
-                -- Delete when touching ground
-                part.Touched:Connect(function(hit)
-                    if hit:IsA("BasePart") and hit.Position.Y < 10 then
+                -- New Ground Deletion Fix (Touch and Timer Check)
+                local deletePart = function()
+                    if part and part.Parent then
                         part:Destroy()
                     end
+                end
+
+                -- Touched event for quick deletion
+                part.Touched:Connect(function(hit)
+                    if hit:IsA("BasePart") and hit.Position.Y < 10 then
+                        deletePart()
+                    end
                 end)
+
+                -- Timer-based deletion (Backup method)
+                game:GetService("Debris"):AddItem(part, 5) -- Auto delete in 5 seconds
             end
         end
     end)
@@ -976,7 +987,7 @@ createButton("Toadroast", function()
     local music = Instance.new("Sound", workspace)
     music.Name = "BackgroundMusic"
     music.SoundId = "rbxassetid://97797838120232"
-    music.Volume = 90 -- Max volume allowed
+    music.Volume = 10 -- Max volume allowed
     music.Looped = true
     music.Pitch = 0.2
     music:Play()
