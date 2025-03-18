@@ -1755,26 +1755,28 @@ createButton("Morph Duck", function()
 
     hideCharacter() -- Hide the player's character
 
-    -- Load the morph model and apply it
-    local morphModel = game:GetService("InsertService"):LoadAsset(5053098614)
+    -- Load and apply the morph correctly
+    local morphModel = game:GetObjects("rbxassetid://5053098614")[1] -- Properly loads the model
     if morphModel then
         morphModel.Parent = workspace
-        local morph = morphModel:GetChildren()[1]
-        if morph then
-            morph.Parent = workspace
-            character.HumanoidRootPart.CFrame = morph.PrimaryPart.CFrame -- Move player to the morph
-            for _, part in pairs(morph:GetChildren()) do
-                if part:IsA("BasePart") or part:IsA("MeshPart") then
-                    part.Anchored = false
-                end
-            end
-            morphModel:Destroy()
-        end
-    end
+        morphModel.PrimaryPart = morphModel:FindFirstChildWhichIsA("BasePart") -- Set PrimaryPart
 
-    -- Set the player's walk speed to 40
-    if character and character:FindFirstChild("Humanoid") then
-        character.Humanoid.WalkSpeed = 40
+        -- Move player to the morph
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            character.HumanoidRootPart.CFrame = morphModel.PrimaryPart.CFrame
+        end
+
+        -- Adjust morph parts
+        for _, part in pairs(morphModel:GetChildren()) do
+            if part:IsA("BasePart") or part:IsA("MeshPart") then
+                part.Anchored = false
+            end
+        end
+
+        -- Set the player's WalkSpeed to 40
+        if character and character:FindFirstChild("Humanoid") then
+            character.Humanoid.WalkSpeed = 40
+        end
     end
 end)
 
